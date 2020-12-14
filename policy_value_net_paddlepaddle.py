@@ -61,9 +61,10 @@ class PolicyValueNet():
                                 regularization= fluid.regularizer.L2Decay(regularization_coeff=0.01)
                                      )
 
-        # if model_file:
-        #     net_params = torch.load(model_file)
-        #     self.policy_value_net.load_state_dict(net_params)
+        if model_file:
+            net_params, _ = fluid.dygraph.load_dygraph(model_file)
+            self.policy_value_net.load_dict(net_params)
+            
     def policy_value(self, state_batch):
         """
         input: a batch of states
