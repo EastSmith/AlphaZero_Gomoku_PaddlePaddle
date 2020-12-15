@@ -2,8 +2,8 @@
 
 
 ## AlphaZero_Gomoku_PaddlePaddle
-这是AlphaZero算法的一个实现（使用PaddlePaddle框架），用于玩简单的棋盘游戏Gomoku（也称为五子棋），使用纯粹的自我博弈的方式开始训练。Gomoku游戏比围棋或象棋简单得多，因此我们可以专注于AlphaZero的训练方案，在一台PC机上几个小时内就可以获得一个相当好的AI模型。
-因为和围棋相比，五子棋的规则较为简单，落子空间也比较小，因此没有用到AlphaGo Zero中大量使用的残差网络，只使用了卷积层和全连接层。
+- 这是AlphaZero算法的一个实现（使用PaddlePaddle框架），用于玩简单的棋盘游戏Gomoku（也称为五子棋），使用纯粹的自我博弈的方式开始训练。Gomoku游戏比围棋或象棋简单得多，因此我们可以专注于AlphaZero的训练方案，在一台PC机上几个小时内就可以获得一个相当好的AI模型。 
+- 因为和围棋相比，五子棋的规则较为简单，落子空间也比较小，因此没有用到AlphaGo Zero中大量使用的残差网络，只使用了卷积层和全连接层。
 
 References:  
 1. AlphaZero: Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm
