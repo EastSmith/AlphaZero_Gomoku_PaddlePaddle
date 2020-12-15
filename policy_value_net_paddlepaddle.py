@@ -105,7 +105,10 @@ class PolicyValueNet():
         # zero the parameter gradients
         self.optimizer.clear_gradients()
         # set learning rate
-        # set_learning_rate(self.optimizer, lr)
+        self.optimizer  = fluid.optimizer.Adam(lr,
+                                parameter_list=self.policy_value_net.parameters(),
+                                regularization= fluid.regularizer.L2Decay(regularization_coeff=0.01)
+                                     )
 
         # forward
         log_act_probs, value = self.policy_value_net(state_batch)
