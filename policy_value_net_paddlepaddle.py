@@ -107,7 +107,7 @@ class PolicyValueNet():
         # set learning rate
         self.optimizer  = fluid.optimizer.Adam(lr,
                                 parameter_list=self.policy_value_net.parameters(),
-                                regularization= fluid.regularizer.L2Decay(regularization_coeff=0.01)
+                                regularization= fluid.regularizer.L2Decay(regularization_coeff=0.001)
                                      )
 
         # forward
