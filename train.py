@@ -12,14 +12,14 @@ from game import Board, Game_UI
 from mcts_pure import MCTSPlayer as MCTS_Pure
 from mcts_alphaGoZero import MCTSPlayer
 from policy_value_net_paddlepaddle import PolicyValueNet  # paddlepaddle
-import paddle.fluid as fluid
+import paddle
 
 
 class TrainPipeline():
     def __init__(self, init_model=None, is_shown = 0):
         # 五子棋逻辑和棋盘UI的参数
-        self.board_width = 15  ###为了更快的训练，可以调整棋盘大小为(8x8) ，(6x6)
-        self.board_height = 15
+        self.board_width = 9  ###为了更快的验证算法，可以调整棋盘大小为(8x8) ，(6x6)
+        self.board_height = 9
         self.n_in_row = 5
         self.board = Board(width=self.board_width,
                            height=self.board_height,
@@ -32,13 +32,13 @@ class TrainPipeline():
         self.temp = 1.0  # 临时变量
         self.n_playout = 400  # 每次移动的模拟次数
         self.c_puct = 5
-        self.buffer_size = 10000
-        self.batch_size = 32  # 训练的mini-batch大小 512
+        self.buffer_size = 10000 #经验池大小 10000
+        self.batch_size = 512  # 训练的mini-batch大小 512
         self.data_buffer = deque(maxlen=self.buffer_size)
         self.play_batch_size = 1
         self.epochs = 5  # 每次更新的train_steps数量
         self.kl_targ = 0.02
-        self.check_freq = 50
+        self.check_freq = 100  #评估模型的频率，可以设置大一些比如500
         self.game_batch_num = 1500
         self.best_win_ratio = 0.0
         # 用于纯粹的mcts的模拟数量，用作评估训练策略的对手
@@ -183,6 +183,8 @@ class TrainPipeline():
                 if len(self.data_buffer) > self.batch_size:
                     loss, entropy = self.policy_update()
                     print("loss :{}, entropy:{}".format(loss, entropy))
+                if (i + 1) % 50 == 0:
+                    self.policy_value_net.save_model(os.path.join(dst_path, 'current_policy_step.model'))
                 # 检查当前模型的性能，保存模型的参数
                 if (i + 1) % self.check_freq == 0:
                     print("current self-play batch: {}".format(i + 1))
@@ -194,7 +196,7 @@ class TrainPipeline():
                         # 更新最好的策略
                         self.policy_value_net.save_model(os.path.join(dst_path, 'best_policy.model'))
                         if (self.best_win_ratio == 1.0 and
-                                    self.pure_mcts_playout_num < 5000):
+                                    self.pure_mcts_playout_num < 8000):
                             self.pure_mcts_playout_num += 1000
                             self.best_win_ratio = 0.0
         except KeyboardInterrupt:
@@ -202,11 +204,11 @@ class TrainPipeline():
 
 
 if __name__ == '__main__':
-    use_gpu = True
-    place = fluid.CUDAPlace(0) if use_gpu else fluid.CPUPlace()
-    with fluid.dygraph.guard(place):                 
+        device = paddle.get_device()               
+        paddle.set_device(device)
         is_shown = 0
-        model_path = 'dist/best_policy.model'
+        # model_path = 'dist/best_policy.model'
+        model_path = 'dist/current_policy.model'
 
         training_pipeline = TrainPipeline(model_path, is_shown)
         # training_pipeline = TrainPipeline(None, is_shown)
