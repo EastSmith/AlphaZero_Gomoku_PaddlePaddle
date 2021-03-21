@@ -18,7 +18,7 @@ References:
 ### Requirements
 - Python >= 3.7
 - Numpy >= 1.11
-- PaddlePaddle >= 1.8.0 
+- PaddlePaddle >= 2.0.0 
 
 
 ### Getting Started
