@@ -143,14 +143,15 @@ class Board(object):
     def get_current_player(self):
         return self.current_player
 
-N = 15
+N = 9
 
 IMAGE_PATH = 'UI/'
 
 WIDTH = 540 # 棋盘图片宽
 HEIGHT = 540    # 棋盘图片高
 MARGIN = 22 # 图片上的棋盘边界有间隔
-GRID = (WIDTH - 2 * MARGIN) / (N - 1)   # 设置每个格子的大小
+#GRID = (WIDTH - 2 * MARGIN) / (N - 1)   # 设置每个格子的大小
+GRID = (270-22)/7
 PIECE = 32  # 棋子的大小
 
 # 加上UI的布局的训练方式
